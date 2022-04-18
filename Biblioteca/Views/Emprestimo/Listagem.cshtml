@@ -1,4 +1,4 @@
-@model ICollection<Emprestimo>
+@model List<Emprestimo>
 @{
     ViewData["Title"] = "Listagem de Empréstimos";
 }
@@ -32,42 +32,72 @@
                     <th>Livro</th>
                     <th>Autor</th>
                     <th>Devolvido</th>
-                    <th>Ações</th>
+                    <th>@ViewBag.page</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (Emprestimo e in Model)
                 {
-                    var minutos = (e.DataDevolucao - DateTime.Now).Minutes;
-                    var horas = (e.DataDevolucao - DateTime.Now).Hours;
-                    if (horas < 0 && !e.Devolvido || minutos < 0 && !e.Devolvido)
+                    if (Model.IndexOf(e) < ViewBag.page && Model.IndexOf(e) > (ViewBag.page - 11))
                     {
-                        <tr class="table-danger">
-                            <td>@e.Id</td>
-                            <td>@e.NomeUsuario</td>
-                            <td>@e.DataEmprestimo.ToString("dd/MM/yyyy")</td>
-                            <td>@e.DataDevolucao.ToString("dd/MM/yyyy")</td>
-                            <td>@e.Livro.Titulo</td>
-                            <td>@e.Livro.Autor</td>
-                            <td>@e.Devolvido</td>
-                            <td><a href="/Emprestimo/Edicao/@e.Id">Editar</a></td>
-                        </tr>
-                    }
-                    else
-                    {
-                        <tr>
-                            <td>@e.Id</td>
-                            <td>@e.NomeUsuario</td>
-                            <td>@e.DataEmprestimo.ToString("dd/MM/yyyy")</td>
-                            <td>@e.DataDevolucao.ToString("dd/MM/yyyy")</td>
-                            <td>@e.Livro.Titulo</td>
-                            <td>@e.Livro.Autor</td>
-                            <td>@e.Devolvido</td>
-                            <td><a href="/Emprestimo/Edicao/@e.Id">Editar</a></td>
-                        </tr>
+                        var minutos = (e.DataDevolucao - DateTime.Now).Minutes;
+                        var horas = (e.DataDevolucao - DateTime.Now).Hours;
+                        if (horas < 0 && !e.Devolvido || minutos < 0 && !e.Devolvido)
+                        {
+                            <tr class="table-danger">
+                                <td>@e.Id</td>
+                                <td>@e.NomeUsuario</td>
+                                <td>@e.DataEmprestimo.ToString("dd/MM/yyyy")</td>
+                                <td>@e.DataDevolucao.ToString("dd/MM/yyyy")</td>
+                                <td>@e.Livro.Titulo</td>
+                                <td>@e.Livro.Autor</td>
+                                <td>@e.Devolvido</td>
+                                <td><a href="/Emprestimo/Edicao/@e.Id">Editar</a></td>
+                            </tr>
+                        }
+                        else
+                        {
+                            <tr>
+                                <td>@e.Id</td>
+                                <td>@e.NomeUsuario</td>
+                                <td>@e.DataEmprestimo.ToString("dd/MM/yyyy")</td>
+                                <td>@e.DataDevolucao.ToString("dd/MM/yyyy")</td>
+                                <td>@e.Livro.Titulo</td>
+                                <td>@e.Livro.Autor</td>
+                                <td>@e.Devolvido</td>
+                                <td><a href="/Emprestimo/Edicao/@e.Id">Editar</a></td>
+                            </tr>
+                        }
                     }
                 }
             </tbody>
+            <tfoot>
+                <tr>
+                    <div class="navFooter">
+                        <button id="voltar"><</button>
+                        <button id="avancar">></button>
+                    </div>
+                </tr>
+            </tfoot>
         </table>
     </div>
 </div>
+
+<script>
+    document.querySelector("#voltar").addEventListener("click", () => {
+        let paginaAtual = location.search.replace("?page=", "")
+        if (!paginaAtual) paginaAtual = 0
+        paginaAtual = parseInt(paginaAtual)
+        if (paginaAtual == 0) return
+        let paginaAlvo = paginaAtual - 1
+        location.search = "?page=" + paginaAlvo
+    })
+    document.querySelector("#avancar").addEventListener("click", () => {
+        let paginaAtual = location.search.replace("?page=", "")
+        if (!paginaAtual) paginaAtual = 0
+        paginaAtual = parseInt(paginaAtual)
+        if (paginaAtual == 0) paginaAtual = 1
+        let paginaAlvo = paginaAtual + 1
+        location.search = "?page=" + paginaAlvo
+    })
+</script>

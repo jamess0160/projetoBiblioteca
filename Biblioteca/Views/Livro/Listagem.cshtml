@@ -4,44 +4,75 @@
 }
 <div class="row">
     <div class="col-md-12">
-    <form class="form-inline" method="POST">
-        <div class="form-group mb-2">
-            <select name="TipoFiltro" class="form-control">
-                <option value="Autor">Autor</option>
-                <option value="Titulo">Título</option>
-            </select>
-        </div>
-        <div class="form-group mb-2 mx-sm-3">
-            <input type="text" placeholder="Filtro" name="Filtro" class="form-control" />
-        </div>
-        <button type="submit" class="btn btn-primary mb-2">Pesquisar</button>
-    </form>
+        <form class="form-inline" method="POST">
+            <div class="form-group mb-2">
+                <select name="TipoFiltro" class="form-control">
+                    <option value="Autor">Autor</option>
+                    <option value="Titulo">Título</option>
+                </select>
+            </div>
+            <div class="form-group mb-2 mx-sm-3">
+                <input type="text" placeholder="Filtro" name="Filtro" class="form-control" />
+            </div>
+            <button type="submit" class="btn btn-primary mb-2">Pesquisar</button>
+        </form>
     </div>
 </div>
 
 <div class="row">
     <div class="col-md-12">
-        <table class="table table-striped"> 
+        <table class="table table-striped">
             <thead>
-                <tr><th>Id</th>
-                <th>Titulo</th>
-                <th>Autor</th>
-                <th>Ano</th>
-                <th></th>
+                <tr>
+                    <th>Id</th>
+                    <th>Titulo</th>
+                    <th>Autor</th>
+                    <th>Ano</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
-                @foreach(Livro l in Model)
+                @foreach (Livro l in Model)
                 {
-                <tr>
-                    <td>@l.Id</td>
-                    <td>@l.Titulo</td>
-                    <td>@l.Autor</td>
-                    <td>@l.Ano</td>
-                    <td><a href="/Livro/Edicao/@l.Id">Editar</a></td>
-                </tr>
+                    if (Model.IndexOf(l) < ViewBag.page && Model.IndexOf(l) > (ViewBag.page - 11))
+                    {
+                        <tr>
+                            <td>@l.Id</td>
+                            <td>@l.Titulo</td>
+                            <td>@l.Autor</td>
+                            <td>@l.Ano</td>
+                            <td><a href="/Livro/Edicao/@l.Id">Editar</a></td>
+                        </tr>
+                    }
                 }
             </tbody>
+            <tfoot>
+                <tr>
+                    <div class="navFooter">
+                        <button id="voltar"><</button>
+                        <button id="avancar">></button>
+                    </div>
+                </tr>
+            </tfoot>
         </table>
     </div>
 </div>
+
+<script>
+    document.querySelector("#voltar").addEventListener("click", () => {
+        let paginaAtual = location.search.replace("?page=", "")
+        if (!paginaAtual) paginaAtual = 0
+        paginaAtual = parseInt(paginaAtual)
+        if (paginaAtual == 0) return
+        let paginaAlvo = paginaAtual - 1
+        location.search = "?page=" + paginaAlvo
+    })
+    document.querySelector("#avancar").addEventListener("click", () => {
+        let paginaAtual = location.search.replace("?page=", "")
+        if (!paginaAtual) paginaAtual = 0
+        paginaAtual = parseInt(paginaAtual)
+        if (paginaAtual == 0) paginaAtual = 1
+        let paginaAlvo = paginaAtual + 1
+        location.search = "?page=" + paginaAlvo
+    })
+</script>

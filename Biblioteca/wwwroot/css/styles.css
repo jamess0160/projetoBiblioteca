@@ -38,3 +38,14 @@
     text-decoration: none;
     background-color: #efefef9d;
 }
+
+.navFooter {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.navFooter>button {
+    margin: 1rem;
+    border: transparent
+}
