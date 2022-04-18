@@ -22,27 +22,31 @@ namespace Biblioteca.Controllers
         public IActionResult Index()
         {
             Autenticacao.CheckLogin(this);
+            ViewBag.usuario = HttpContext.Session.GetString("user");
             return View();
         }
 
         public IActionResult Login()
         {
-            return View();
+            return View(true);
         }
 
         [HttpPost]
         public IActionResult Login(string login, string senha)
         {
-            if(login != "admin" || senha != "123")
+            new banco();
+            string validacao = banco.checkLogin(login, senha);
+            if (validacao == "correto")
             {
-                ViewData["Erro"] = "Senha inválida";
-                return View();
+                HttpContext.Session.SetString("user", login);
+                return RedirectToAction("Index");
             }
             else
             {
-                HttpContext.Session.SetString("user", "admin");
-                return RedirectToAction("Index");
+                return View(false);
+
             }
+
         }
 
         public IActionResult Privacy()

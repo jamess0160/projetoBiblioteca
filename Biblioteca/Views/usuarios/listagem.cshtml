@@ -1,0 +1,37 @@
+@model List<usuario>
+@{
+    ViewData["Title"] = "Listagem de Empréstimos";
+}
+
+<div class="row">
+    <div class="cabecalhoUsuarios">
+        <input type="text" placeholder="Nome do usuario">
+        <a href="#" class="linkBotao">Buscar</a>
+        <a href="/usuarios/novo" class="linkBotao">Novo Usuario</a>
+    </div>
+</div>
+
+<div class="row">
+    <table class="tabela">
+        <thead>
+            <tr class="linhas">
+                <th style="width: 1.5rem;">Id</th>
+                <th>Usuario</th>
+                <th style="width: 7.5rem;">Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (usuario e in Model)
+            {
+                <tr class="linhas">
+                    <td style="width: 1.5rem;">@e.id</td>
+                    <td>@e.nome</td>
+                    <td style="width: 7.5rem;">
+                        <a href="/usuarios/editar?id=@e.id" class="linkBotao">Editar</a>
+                        <a href="/usuarios/apagar?id=@e.id" class="linkBotao">Deletar</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

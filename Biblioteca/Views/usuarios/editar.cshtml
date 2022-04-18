@@ -1,0 +1,17 @@
+@model List<usuario>
+
+@foreach (usuario item in Model)
+{
+    @if (item.id == ViewBag.id)
+    {
+        <h1>Editando usuario @item.id</h1>
+        <div class="row">
+            <form method="POST">
+                <input type="hidden" name="id" value="@item.id">
+                <input type="text" name="nome" value="@item.nome" placeholder="Novo nome">
+                <input type="password" name="senha" placeholder="Nova senha">
+                <input type="submit">
+            </form>
+        </div>
+    }
+}

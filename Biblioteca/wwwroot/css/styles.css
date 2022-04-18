@@ -1,0 +1,40 @@
+﻿.cabecalhoUsuarios {
+    display: flex;
+    width: 100vw;
+    justify-content: space-between;
+}
+
+.cabecalhoUsuarios>button {
+    border: 1px solid black;
+}
+
+.cabecalhoUsuarios>input {
+    width: 70vw;
+}
+
+.tabela {
+    margin-top: 1rem;
+}
+
+.linhas>td,
+.linhas>th {
+    padding: 0.25rem;
+    border: 1px solid black;
+    width: calc(70vw - 1.5rem);
+}
+
+.linhas>td>button {
+    border: 1px solid black;
+}
+
+.linkBotao {
+    color: black;
+    padding: 0.10rem;
+    border: 1px solid black;
+    background-color: #efefef;
+}
+
+.linkBotao:hover {
+    text-decoration: none;
+    background-color: #efefef9d;
+}
