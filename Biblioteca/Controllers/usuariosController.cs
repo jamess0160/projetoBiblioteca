@@ -8,11 +8,9 @@ namespace Biblioteca.Controllers
     {
         public IActionResult listagem()
         {
-            Autenticacao.CheckLoginAdmin(this);
-            new banco();
-            List<usuario> result;
-            result = banco.selectUsuarios();
-            return View(result);
+            userService service = new userService();
+            List<usuario> usuarios = service.getUsers();
+            return View(usuarios);
         }
 
         public IActionResult novo()
@@ -22,11 +20,10 @@ namespace Biblioteca.Controllers
         }
 
         [HttpPost]
-        public IActionResult novo(string nome, string senha)
+        public IActionResult novo(usuario novoUsuario)
         {
-            Autenticacao.CheckLoginAdmin(this);
-            new banco();
-            banco.novoUsuario(nome, senha);
+            userService service = new userService();
+            service.CreateUser(novoUsuario);
             return RedirectToAction("listagem");
         }
 
@@ -34,27 +31,23 @@ namespace Biblioteca.Controllers
         {
             Autenticacao.CheckLoginAdmin(this);
             ViewBag.id = id;
-            new banco();
-            List<usuario> result;
-            result = banco.selectUsuarios();
-            return View(result);
+            userService service = new userService();
+            return View(service.getUsers());
         }
 
         [HttpPost]
-        public IActionResult editar(int id, string nome, string senha)
+        public IActionResult editar(usuario update)
         {
-            Autenticacao.CheckLoginAdmin(this);
-            new banco();
-            usuario usuario = new usuario(id, nome, senha);
-            banco.updateUsuario(id, usuario);
+            userService service = new userService();
+            service.updateUser(update);
             return RedirectToAction("listagem");
         }
 
         public IActionResult apagar(int id)
         {
             Autenticacao.CheckLoginAdmin(this);
-            new banco();
-            banco.deleteUsuario(id);
+            userService service = new userService();
+            service.deleteUser(id);
             return RedirectToAction("listagem");
         }
     }

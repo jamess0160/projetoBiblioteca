@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Biblioteca.Models;
 using Microsoft.AspNetCore.Http;
+using System.Security.Cryptography;
 
 namespace Biblioteca.Controllers
 {
@@ -32,13 +33,22 @@ namespace Biblioteca.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login(string login, string senha)
+        public IActionResult Login(usuario credenciais)
         {
-            new banco();
-            string validacao = banco.checkLogin(login, senha);
-            if (validacao == "correto")
+            CriarMD5 md5 = new CriarMD5();
+            credenciais.id = 3;
+            credenciais.senha = md5.RetornarMD5(credenciais.senha);
+            userService service = new userService();
+            List<usuario> usuarios = service.getUsers();
+            var validacao = false;
+            foreach(usuario item in usuarios){
+                if(item.nome == credenciais.nome && item.senha == credenciais.senha){
+                   validacao = true;
+                }
+            }
+            if (validacao)
             {
-                HttpContext.Session.SetString("user", login);
+                HttpContext.Session.SetString("user", credenciais.nome);
                 return RedirectToAction("Index");
             }
             else
